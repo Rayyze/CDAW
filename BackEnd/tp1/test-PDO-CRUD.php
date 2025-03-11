@@ -3,27 +3,28 @@
 require_once("initPDO.php");
 
 class User {
-    public int $id;
-    public string $name;
-    public string $email;
+    public $props;
 
     public static $users;
+
+    public function __construct() {
+        $this->props = array();
+    }
+
+    public function __set(string $key, mixed $value) {
+        $this->props[$key] = $value;
+    }
+
+    public function __get(string $key) {
+        return $this->props[$key];
+    }
 
     public static function getAllUsers($pdo) {
         $request = $pdo->prepare("SELECT * FROM users");
         $request->execute();
     
-        return $request->fetchAll(PDO::FETCH_CLASS, "User");
+        return $request->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "User");
     }
-
-    public function toHtml() {
-        echo("<tr>");
-            echo("<td>$this->id</td>");
-            echo("<td>$this->name</td>");
-            echo("<td>$this->email</td>");
-        echo("</tr>");
-    }
-
 
     public static function showUserAsTable() {
         echo("<h2>Liste des Utilisateurs</h2>");
@@ -33,6 +34,7 @@ class User {
                     echo("<th>ID</th>");
                     echo("<th>Nom d'utilisateur</th>");
                     echo("<th>Email</th>");
+                    echo("<th>Actions</th>");
                 echo("</tr>");
             echo("</thead>");
             echo("<tbody>");
@@ -42,11 +44,55 @@ class User {
             echo("</tbody>");
         echo("</table>");
     }
+
+    public function toHtml() {
+        echo "<tr>";
+        echo "<form method='post'>";
+        echo "<td>{$this->id}</td>";
+        
+        if (isset($_POST['edit']) && $_POST['edit'] == $this->id) {
+            echo "<td><input type='text' name='name' value='{$this->name}' required></td>";
+            echo "<td><input type='email' name='email' value='{$this->email}' required></td>";
+            echo "<td>
+                    <input type='hidden' name='update_id' value='{$this->id}'>
+                    <button type='submit' name='update'>Confirmer</button>
+                    <button type='button' name='update' onclick='history.back()'>Annuler</button>
+                  </td>";
+        } else {
+            echo "<td>{$this->name}</td>";
+            echo "<td>{$this->email}</td>";
+            echo "<td>
+                    <form method='post'>
+                        <input type='hidden' name='edit' value='{$this->id}'>
+                        <button type='submit'>Modifier</button>
+                    </form>
+                    <form method='post'>
+                        <input type='hidden' name='delete_id' value='{$this->id}'>
+                        <button type='submit' name='delete'>Supprimer</button>
+                    </form>
+                  </td>";
+        }
+    
+        echo "</form>";
+        echo "</tr>";
+    }    
 }
 
 User::$users = User::getAllUsers($pdo);
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["name"], $_POST["email"])) {
+
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_id"]) && isset($_POST["name"], $_POST["email"])) {
+    $updateQuery = $pdo->prepare("UPDATE users SET name = :name, email = :email WHERE id = :id");
+    $updateQuery->execute([
+        ":id" => $_POST["update_id"],
+        ":name" => trim($_POST["name"]),
+        ":email" => trim($_POST["email"])
+    ]);
+
+    header("Location: " . $_SERVER["PHP_SELF"]);
+    exit();
+} else if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["name"], $_POST["email"])) {
     $name = trim($_POST["name"]);
     $email = trim($_POST["email"]);
 
@@ -62,6 +108,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["name"], $_POST["email
     } else {
         $error = "Veuillez remplir tous les champs correctement.";
     }
+} else if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["delete_id"])) {
+    $deleteQuery = $pdo->prepare("DELETE FROM users WHERE id = :id");
+    $deleteQuery->execute([
+        ":id" => $_POST["delete_id"]
+    ]);
+
+    header("Location: " . $_SERVER["PHP_SELF"]);
+    exit();
 }
 
 /*** Fermeture de la connexion ***/

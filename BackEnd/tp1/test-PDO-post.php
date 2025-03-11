@@ -100,13 +100,9 @@ $pdo = null;
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($users as $user): ?>
-                <tr>
-                    <td><?= htmlspecialchars($user->id) ?></td>
-                    <td><?= htmlspecialchars($user->name) ?></td>
-                    <td><?= htmlspecialchars($user->email) ?></td>
-                </tr>
-            <?php endforeach; ?>
+            <?php foreach ($users as $user){
+                echo("<tr><td>$user->id</td><td>$user->name</td><td>$user->email</td></tr>");
+            } ?>
         </tbody>
     </table>
 

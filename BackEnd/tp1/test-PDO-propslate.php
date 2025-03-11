@@ -3,27 +3,28 @@
 require_once("initPDO.php");
 
 class User {
-    public int $id;
-    public string $name;
-    public string $email;
+    public $props;
 
     public static $users;
+
+    public function __construct() {
+        $this->props = array();
+    }
+
+    public function __set(string $key, mixed $value) {
+        $this->props[$key] = $value;
+    }
+
+    public function __get(string $key) {
+        return $this->props[$key];
+    }
 
     public static function getAllUsers($pdo) {
         $request = $pdo->prepare("SELECT * FROM users");
         $request->execute();
     
-        return $request->fetchAll(PDO::FETCH_CLASS, "User");
+        return $request->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "User");
     }
-
-    public function toHtml() {
-        echo("<tr>");
-            echo("<td>$this->id</td>");
-            echo("<td>$this->name</td>");
-            echo("<td>$this->email</td>");
-        echo("</tr>");
-    }
-
 
     public static function showUserAsTable() {
         echo("<h2>Liste des Utilisateurs</h2>");
@@ -42,9 +43,18 @@ class User {
             echo("</tbody>");
         echo("</table>");
     }
+
+    public function toHtml() {
+        echo("<tr>");
+            echo("<td>$this->id</td>");
+            echo("<td>$this->name</td>");
+            echo("<td>$this->email</td>");
+        echo("</tr>");
+    }
 }
 
 User::$users = User::getAllUsers($pdo);
+
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["name"], $_POST["email"])) {
     $name = trim($_POST["name"]);
