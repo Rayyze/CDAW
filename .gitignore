@@ -2,3 +2,4 @@
 Dockerfile
 *.dockerignore
 *.yaml
+BackEnd/tp2/config.php
