@@ -29,7 +29,7 @@ class UserModel {
         $request->execute();
 
         $result = $request->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, "UserModel");
-        if (isset($result)) {
+        if (isset($result) && count($result) > 0) {
             return $result[0];
         } else {
             return null;
@@ -47,7 +47,7 @@ class UserModel {
     }
 
     public function updateUser() {
-        if (!isset($this->id)) {
+        if (!array_key_exists('id', $this->props)) {
             return false;
         }
         
@@ -60,7 +60,7 @@ class UserModel {
     }
 
     public function deleteUser() {
-        if (!isset($this->id)) {
+        if (!array_key_exists('id', $this->props)) {
             return false;
         }
 

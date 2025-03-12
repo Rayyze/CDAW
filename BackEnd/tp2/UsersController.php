@@ -109,8 +109,8 @@ class UsersController {
         if (!$user->deleteUser()) {
             return $this->internalErrorResponse();
         }
-        $response['status_code_header'] = 'HTTP/1.1 204 No Content';
-        $response['body'] = null;
+        $response['status_code_header'] = 'HTTP/1.1 200 OK';
+        $response['body'] = json_encode($user->props);
         return $response;
     }
 
