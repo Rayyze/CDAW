@@ -20,17 +20,17 @@ class UsersController {
                 }
                 break;
             case 'POST':
-                if (isset($input['name']) && isset($input['email'])) {
-                    $response = $this->createUser($input['name'], $input['email']);
+                if (isset($input['name']) && isset($input['email']) && isset($input['pwd'])) {
+                    $response = $this->createUser($input['name'], $input['email'], $input['pwd']);
                 } else {
                     $response = $this->badRequestResponse();
                 }
                 break;
             case 'PUT':
-                if (!isset($this->params[0]) || !isset($input['name']) || !isset($input['email'])) {
+                if (!isset($this->params[0]) || !isset($input['name']) || !isset($input['email']) || !isset($input['pwd'])) {
                     $response = $this->badRequestResponse();
                 } else {
-                    $response = $this->updateUser($this->params[0], $input['name'], $input['email']);
+                    $response = $this->updateUser($this->params[0], $input['name'], $input['email'], $input['pwd']);
                 }
                 break;
             case 'DELETE':
@@ -72,10 +72,11 @@ class UsersController {
         return $response;
     }
 
-    private function createUser($name, $email) {
+    private function createUser($name, $email, $pwd) {
         $user = new UserModel();
         $user->name = $name;
         $user->email = $email;
+        $user->pwd = $pwd;
         $user->createUser($user);
         if (!$user) {
             return $this->internalErrorResponse();
@@ -85,7 +86,7 @@ class UsersController {
         return $response;
     }
 
-    private function updateUser($id, $name, $email) {
+    private function updateUser($id, $name, $email, $pwd) {
         $user = UserModel::getUserById($id);
         if (!$user) {
             return $this->notFoundResponse();
@@ -93,6 +94,7 @@ class UsersController {
         $user->id = $id;
         $user->name = $name;
         $user->email = $email;
+        $user->pwd = $pwd;
         if (!$user->updateUser()) {
             return $this->internalErrorResponse();
         }

@@ -1,11 +1,6 @@
 <?php
 require_once "bootstrap.php";
 
-use Firebase\JWT;
-
-$e = new BeforeValidException();
-exit;
-
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
 header("Access-Control-Allow-Origin: *");
 

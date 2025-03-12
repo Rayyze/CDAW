@@ -9,7 +9,6 @@ spl_autoload_register(function ($class_name) {
         '.',
         'controller',
         'model',
-        '../../libs/php-jwt/src'
     );
 
     foreach ($dirs as $dir) {
