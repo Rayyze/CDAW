@@ -25,15 +25,13 @@ In the following sections the url above will be referred as {baseUrl}
 -   **Request Body:**
     ```json
     {
-        "username": "string",
-        "password": "string",
+        "name": "string",
         "email": "string"
     }
     ```
 -   **Response:**
     -   `201 Created`: User created successfully.
     -   `400 Bad Request`: Invalid request body.
-    -   `409 Conflict`: User already exists.
 - **Example:**
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"name": "testuser", "email": "test@example.com"}' {baseUrl}?users
@@ -74,8 +72,7 @@ curl {baseUrl}?users/1
 -   **Request Body:**
     ```json
     {
-        "username": "string",
-        "password": "string",
+        "name": "string",
         "email": "string"
     }
     ```
@@ -95,7 +92,7 @@ curl -X PUT -H "Content-Type: application/json" -d '{"name": "testuser", "email"
 -   **Method:** `DELETE`
 -   **Description:** Deletes a user by their ID.
 -   **Response:**
-    -   `204 No Content`: User deleted successfully.
+    -   `200 OK`: User deleted successfully.
     -   `404 Not Found`: User not found.
     -   `500 Internal Server Error`: An error occurred on the server.
 - **Example:**

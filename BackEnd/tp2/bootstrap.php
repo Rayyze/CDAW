@@ -1,7 +1,22 @@
 <?php
-// simplest auto loader cf. doc PHP
-// we will revisit that later
 spl_autoload_register(function ($class_name) {
     $classFile = $class_name . '.php';
-    include $classFile;
+    if (file_exists($classFile)) {
+        include $classFile;
+        return;
+    }
+    $dirs = array(
+        '.',
+        'controller',
+        'model',
+        '../../libs/php-jwt/src'
+    );
+
+    foreach ($dirs as $dir) {
+        $classFile = $dir . '/' . $class_name . '.php';
+        if (file_exists($classFile)) {
+            include $classFile;
+            return;
+        }
+    }
 });

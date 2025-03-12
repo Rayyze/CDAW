@@ -1,6 +1,11 @@
 <?php
 require_once "bootstrap.php";
 
+use Firebase\JWT;
+
+$e = new BeforeValidException();
+exit;
+
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
 header("Access-Control-Allow-Origin: *");
 
@@ -56,6 +61,9 @@ switch($controllerName) {
         // GET api.php?/users
         // POST api.php?/users
         $controller = new UsersController($requestMethod, $params);
+        break;
+    case 'login' :
+        $controller = new LoginController($requestMethod, $params);
         break;
     default :
         header("HTTP/1.1 404 Not Found");
