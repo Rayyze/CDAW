@@ -9,12 +9,12 @@ class Response {
    }
 
    public static function errorResponse($message = "") {
-      return new Response(400,$message);
+      return new Response(400,json_encode(array("error" => $message)));
    }
 
    public static function serverErrorResponse($message = "")
    {
-      return new Response(500,$message);
+      return new Response(500,json_encode(array("error" => $message)));
    }
 
    public static function okResponse($message = "")
@@ -24,12 +24,12 @@ class Response {
 
    public static function notFoundResponse($message = "")
    {
-      return new Response(404,$message);
+      return new Response(404,json_encode(array("error" => $message)));
    }
 
    public static function errorInParametersResponse($message = "")
    {
-      return new Response(400,$message);
+      return new Response(400,json_encode(array("error" => $message)));
    }
 
    public static function interceptEchos() {

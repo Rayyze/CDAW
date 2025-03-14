@@ -14,15 +14,15 @@ class DatabasePDO extends PDO {
    public function __construct() {
 	   // $db = new PDO("sqlite::memory");
 
-	   $connectionString = "mysql:host=". DB_HOST;
+	   $connectionString = "mysql:host=". _MYSQL_HOST;
 
-	   if(defined('DB_PORT'))
-		   $connectionString .= ";port=". DB_PORT;
+	   if(defined('_MYSQL_PORT'))
+		   $connectionString .= ";port=". _MYSQL_PORT;
 
-	   $connectionString .= ";dbname=" . DB_DATABASE;
+	   $connectionString .= ";dbname=" . _MYSQL_DBNAME;
 	   $connectionString .= ";charset=utf8";
 
-      parent::__construct($connectionString,DB_USERNAME,DB_PASSWORD);
+      parent::__construct($connectionString,_MYSQL_USER,_MYSQL_PASSWORD);
       $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
    }
 }

@@ -16,6 +16,10 @@ class Model {
 		$this->props[$prop] = $val;
 	}
 
+	public function getProps() {
+		return $this->props;
+	}
+
 	protected static function db(){
 		return DatabasePDO::singleton();
 	}

@@ -3,7 +3,6 @@ class Request {
 
 	protected $controllerName;
 	protected $uriParameters;
-   protected $requestMethod;
    protected $baseURI;
 
     public static function getCurrentRequest(){
@@ -42,7 +41,6 @@ class Request {
    // $_SERVER['SCRIPT_NAME'] donne le préfixe
    // et que parse_url($_SERVER['REQUEST_URI']
    protected function initControllerAndParametersFromURI(){
-      $this->requestMethod = $_SERVER["REQUEST_METHOD"];
       if (isset($_GET['controller'])) {
          $this->controllerName = $_GET['controller'];
       } else {
@@ -66,6 +64,10 @@ class Request {
 
    public function getUriParameters() {
       return $this->uriParameters;
+   }
+
+   public function getRequestBody() {
+      return json_decode(file_get_contents("php://input"), true);
    }
 
 	// retourne la méthode HTTP utilisée dans la requête courante

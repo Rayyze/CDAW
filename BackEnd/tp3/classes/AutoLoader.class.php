@@ -14,7 +14,7 @@ class AutoLoader {
             $classFile = __ROOT_DIR . '/' . $dir . '/' . $className . '.class.php';
             if (file_exists($classFile)) {
                 include $classFile;
-                if ($dir === "model") {
+                if ($dir === "model" && $className != "Model") {
                     include __ROOT_DIR . '/sql/' . $className . '.sql.php';
                 }
                 return;

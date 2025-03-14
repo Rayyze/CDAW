@@ -1,13 +1,16 @@
 <?php
 
 User::addSqlQuery('USER_LIST',
-	'SELECT * FROM  USER ORDER BY USER_LOGIN');
+	'SELECT * FROM  users ORDER BY id');
 
-User::addSqlQuery('USER_GET_WITH_LOGIN',
-	'SELECT * FROM USER WHERE USER_LOGIN=:login');
+User::addSqlQuery('USER_GET_WITH_ID',
+	"SELECT * FROM users WHERE id = :id");
 
 User::addSqlQuery('USER_CREATE',
-	'INSERT INTO USER (USER_ID, USER_LOGIN, USER_EMAIL, USER_ROLE, USER_PWD, USER_NAME, USER_SURNAME) VALUES (NULL, :login, :email, :role, :pwd, :name, :surname)');
+	'INSERT INTO users (name, email, pwd) VALUES (:name, :email, :pwd)');
+
+User::addSqlQuery('USER_UPDATE',
+	"UPDATE users SET name = :name, email = :email, pwd = :pwd WHERE id = :id");
 
 User::addSqlQuery('USER_CONNECT',
-	'SELECT * FROM USER WHERE USER_LOGIN=:login and USER_PWD=:password');
+	'SELECT * FROM users WHERE id=:id and pwd=:pwd');
