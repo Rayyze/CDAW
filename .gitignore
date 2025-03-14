@@ -4,3 +4,4 @@ Dockerfile
 *.yaml
 BackEnd/tp2/config.php
 libs
+BackEnd/tp3/config/config.php
